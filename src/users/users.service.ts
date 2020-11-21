@@ -1,31 +1,32 @@
 import { Injectable } from '@nestjs/common'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
 import { User } from './users.model'
+import { UserModule } from './users.module';
 
 @Injectable()
 export class UserService {
-    users: User[] = []
-    constructor() { }
+    constructor(@InjectModel('User') private readonly UserModel: Model<User>) { }
 
-    createUser(id: string, name: string, email: string, password: string, role: string): any {
-        const user = new User(id, name, email, password, role)
-        this.users.push(user)
-        return user
+    async createUser(id: string, name: string, email: string, password: string, role: string) {
+        const user = new this.UserModel({ id, name, email, password, role });
+        const result = await user.save();
+        return result.id;
     }
-    getUsers(): any {
-        return this.users
+    async getUsers() {
+        const results = await this.UserModel.find()
+        return results
     }
-    deletetUsers(id: string) {
-        const item = this.users.findIndex(x => x.id === id)
-        console.log('out :  ' + item)
-        this.users.splice(item, 1)
-        return this.users
+    async getOne(id: string) {
+        const result = await this.UserModel.findById(id)
+        return result
     }
-    updateUser(id: string, user: User): any {
-        let item = this.users.find(x => x.id === id)
-        item.name = user.name
-        item.email = user.email
-        item.password = user.password
-        item.role = user.role
-        return user
+    async deleteOne(id: string) {
+        const item = await this.UserModel.findByIdAndRemove(id)
+        return item
+    }
+    async updateUser(id: string, user: UserModule) {
+        const item = await this.UserModel.findByIdAndUpdate(id, user)
+        return item
     }
 }
