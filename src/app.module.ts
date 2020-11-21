@@ -7,7 +7,7 @@ import { UserModule } from './users/users.module';
 @Module({
   //mongodb+srv://pasta94:pasta94@alexrestau.3cnpg.mongodb.net/<dbname>?retryWrites=true&w=majority
   //mongodb://localhost/restau
-  imports: [UserModule , MongooseModule.forRoot(process.env.MONGODB_URL)],
+  imports: [UserModule , MongooseModule.forRoot(process.env.MONGODB_URL||'mongodb://localhost/restau')],
   controllers: [AppController],
   providers: [AppService],
 })
