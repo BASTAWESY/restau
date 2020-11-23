@@ -5,23 +5,23 @@ import { UserService } from './users.service'
 export class UserController {
     constructor(private readonly userService: UserService) { }
     @Post()
-    createUser(@Body('id') id: string,
+    createUser(
         @Body('name') name: string,
         @Body('email') email: string,
         @Body('password') password: string,
         @Body('role') role: string): any {
-        return this.userService.createUser(id, name, email, password, role)
+        return this.userService.createUser(name, email, password, role)
     }
-    @Get('/data')
+    @Get('/')
     getUsers() {
         return this.userService.getUsers()
     }
     @Get('/:id')
-    getOne(@Param('id') id:string) {
+    getOne(@Param('id') id: string) {
         return this.userService.getOne(id)
     }
     @Delete('/:id')
-    deleteOne(@Param('id') id:string) {
+    deleteOne(@Param('id') id: string) {
         return this.userService.deleteOne(id)
     }
     @Patch('/:id')
@@ -30,8 +30,7 @@ export class UserController {
         @Body('name') name: string,
         @Body('email') email: string,
         @Body('password') password: string,
-        @Body('role') role: string) {   
-        const user = {id,name,email,password,role}
-        return this.userService.updateUser(id, user)
+        @Body('role') role: string) {
+        return this.userService.updateUser(id, name, email, password, role)
     }
 }
