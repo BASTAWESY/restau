@@ -11,7 +11,7 @@ import { RestauModule } from './restaurants/restaurants.module';
   //mongodb://localhost/restau
   //link f cloud DB == > process.env.MONGODB_URL ||
   imports: [UserModule, CityModule, RestauModule ,
-    MongooseModule.forRoot('mongodb://localhost/restau')
+    MongooseModule.forRoot(process.env.MONGODB_URL ||'mongodb://localhost/restau')
   ],
   controllers: [AppController],
   providers: [AppService],
