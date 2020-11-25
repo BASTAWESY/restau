@@ -2,15 +2,24 @@ import * as mongoose from 'mongoose'
 
 export const userSchema = new mongoose.Schema({
     id: mongoose.Types.ObjectId,
-    name: { type: String, requires: true },
-    email: { type: String, requires: true },
-    password: { type: String, requires: true },
-    role: { type: String, enum: ['ADMIN', 'NORMAL'], default: 'NORMAL', requires: true }
+    city: { type: String, ref: 'City' },
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    role: {
+        type: String,
+        enum: ['ADMIN', 'NORMAL'],
+        default: 'NORMAL',
+        requires: true
+    },
+    salt: String
 })
 
 export interface User extends mongoose.Document {
-    name: String
-    email: String
-    password: String
-    role: String
+    city:string
+    name: string
+    email: string
+    password: string
+    role: string
+    salt: any
 }

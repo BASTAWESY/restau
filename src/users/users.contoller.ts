@@ -33,4 +33,21 @@ export class UserController {
         @Body('role') role: string) {
         return this.userService.updateUser(id, name, email, password, role)
     }
+    @Post('signup')
+    signUpUser(
+        @Body('name') name: string,
+        @Body('email') email: string,
+        @Body('password') password: string,
+        @Body('role') role: string
+    ) {
+        return this.userService.signUp(name, email, password, role)
+    }
+    @Get('login')
+    logInUser(
+        @Body('name') name: string,
+        @Body('password') password: string
+    ) {
+        return this.userService.logIn(name, password)
+    }
+
 }

@@ -1,28 +1,50 @@
-import { Body, Controller, Get, Post, UploadedFile, UploadedFiles, UseInterceptors } from "@nestjs/common";
+import { Req, Res, Body, Controller, Get, Post, UploadedFile, UseInterceptors, Param, HttpServer, Inject, Request } from "@nestjs/common";
 import { RestauService } from "./restaurants.service";
-import { readFileSync } from "fs"
-import { FilesInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { editFileName, imageFileFilter } from '../utils/file-upload.utils';
+import { imgDTO } from "./image";
+import { REQUEST } from '@nestjs/core';
 
 @Controller('/restaus')
 export class RestauContoller {
-    constructor(private readonly restauService: RestauService) { }
-
+    constructor(private readonly restauService: RestauService,
+        @Inject(REQUEST) private readonly request: Request) { }
     @Post('/')
-    @UseInterceptors(FilesInterceptor('image'))
+    @UseInterceptors(FileInterceptor('image', {
+        storage: diskStorage({
+            destination: './uploads',
+            filename: editFileName,
+        }),
+        fileFilter: imageFileFilter,
+    }),
+    )
     createRestau(
         @Body('name') name: string,
-        @UploadedFiles() image,
+        @UploadedFile() file,
         @Body('location') location: object,
-        @Body('city') city: string
-    ) {
-        console.log(image)
-        image[0].buffer
-        image[0].mimetype
-        this.restauService.createOne(name, image[0], location, city)
- 
+        @Body('city') city: string,
+        @Req() request: Request) {
+        const image = new imgDTO(
+            file.originalname, file.filename,
+            request.headers['host'] + "/uploads/" + file.originalname
+        )
+        this.restauService.createOne(name, image, location, city)
     }
+
     @Get('/')
-    gellAllRestaus(){
+    gellAllRestaus() {
         return this.restauService.getAll()
+    }
+
+    @Get('/report')
+    gellCountOfRestaus() {
+        return this.restauService.getRestausAndCitirs()
+    }
+
+    @Get('/:id')
+    getRestau(@Param('id') id: string) {
+        const restau = this.restauService.getOne(id)
+        return restau
     }
 }

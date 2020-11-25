@@ -3,7 +3,7 @@ import {imgDTO, imgSchema} from './image'
 export const restauSchema = new mongoose.Schema({
     id: mongoose.Types.ObjectId,
     name: { type: String, unique: true, required: true },
-    image: [imgSchema],
+    image: imgSchema,
     location: {
         type: {
             type: String,
