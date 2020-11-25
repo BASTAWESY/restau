@@ -16,7 +16,7 @@ import { join } from 'path';
   //mongodb://localhost/restau
   //link f cloud DB == > process.env.MONGODB_URL ||
   imports: [UserModule, CityModule, RestauModule,
-    MongooseModule.forRoot('mongodb://localhost/restau' || process.env.MONGODB_URL),
+    MongooseModule.forRoot(process.env.MONGODB_URL),
     MulterModule.register({
       dest: './uploads',
 

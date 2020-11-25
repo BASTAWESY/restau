@@ -42,12 +42,12 @@ export class UserController {
     ) {
         return this.userService.signUp(name, email, password, role)
     }
-    @Get('login')
-    logInUser(
-        @Body('name') name: string,
-        @Body('password') password: string
-    ) {
-        return this.userService.logIn(name, password)
-    }
+    // @Get('login')
+    // logInUser(
+    //     @Body('name') name: string,
+    //     @Body('password') password: string
+    // ) {
+    //     return this.userService.logIn(name, password)
+    // }
 
 }
